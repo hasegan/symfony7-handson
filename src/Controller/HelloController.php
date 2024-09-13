@@ -9,13 +9,16 @@ class HelloController
 {
     private array $messages = ['Hello', 'Hi', 'Bye'];
 
-    #[Route('/', name: 'app_index')]
-    public function index(): Response
+    // optional parameter to return a specific number of elements 
+    // (the limit is a number)
+    #[Route('/{limit<\d+>?3}', name: 'app_index')]
+    public function index(int $limit): Response
     {
-        return new Response(implode(',', $this->messages));
+        return new Response(implode(',', array_slice($this->messages, 0, $limit)));
     }
 
-    #[Route('/messages/{id}', name: 'app_show_one')]
+    // accept only numbers as a parameter
+    #[Route('/messages/{id<\d+>}', name: 'app_show_one')]
     public function showOne($id): Response
     {
         return new Response($this->messages[$id]);
