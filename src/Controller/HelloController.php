@@ -8,7 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HelloController extends AbstractController
 {
-    private array $messages = ['Hello', 'Hi', 'Bye'];
+    private array $messages = [
+        ['message' => 'Hello', 'created' => '2024/06/22'],
+        ['message' => 'Hi', 'created' => '2024/04/09'],
+        ['message' => 'Bye', 'created' => '2023/05/12'],
+    ];
 
     // optional parameter to return a specific number of elements 
     // (the limit is a number)

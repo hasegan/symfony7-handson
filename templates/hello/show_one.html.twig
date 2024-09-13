@@ -4,6 +4,7 @@
   <div>The current message is:</div>
 
   <div>
-    <b>{{ message }}</b>
+    <b>{{ message.message }}</b>
+    {{ include('hello/_message_date.html.twig', { message: message }) }}
   </div>
 {% endblock %}
