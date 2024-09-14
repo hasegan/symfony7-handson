@@ -35,15 +35,17 @@ class MicroPostController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         // $em->flush();
 
-        dd($posts->findAll());
+        // dd($posts->findAll());
         return $this->render('micro_post/index.html.twig', [
-            'controller_name' => 'MicroPostController',
+            'posts' => $posts->findAll(),
         ]);
     }
 
-    #[Route('/micro-post/{id}', name: "app_micro_post_show")]
-    public function showOne(MicroPost $microPost): Response
+    #[Route('/micro-post/{post}', name: "app_micro_post_show")]
+    public function showOne(MicroPost $post): Response
     {
-        dd($microPost);
+        return $this->render('micro_post/show.html.twig', [
+            'post' => $post,
+        ]);
     }
 }
