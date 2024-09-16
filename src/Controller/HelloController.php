@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\UserProfile;
+use App\Repository\UserProfileRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 class HelloController extends AbstractController
 {
@@ -16,15 +21,27 @@ class HelloController extends AbstractController
 
     // optional parameter to return a specific number of elements 
     // (the limit is a number)
-    #[Route('/{limit<\d+>?3}', name: 'app_index')]
-    public function index(int $limit): Response
+    #[Route('/', name: 'app_index')]
+    public function index(UserProfileRepository $profiles): Response
     {
+        // $user = new User();
+        // $user->setEmail('email@email.com');
+        // $user->setPassword('12345678');
+
+        // $profile = new UserProfile();
+        // $profile->setUser($user);
+        // // add & remove method were added manually in UserRepository & UserProfileRepository
+        // $profiles->add($profile, true);
+
+        // $profile = $profiles->find(1);
+        // $profiles->remove($profile, true);
+
         // return new Response(implode(',', array_slice($this->messages, 0, $limit)));
         return $this->render(
             'hello/index.html.twig',
             [
                 'messages' => $this->messages,
-                'limit' => $limit
+                'limit' => 3
             ]
         );
     }
