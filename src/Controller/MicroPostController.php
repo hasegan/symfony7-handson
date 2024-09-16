@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\MicroPost;
+use App\Form\MicroPostType;
 use App\Repository\MicroPostRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -54,13 +55,8 @@ class MicroPostController extends AbstractController
     #[Route('/micro-post/add', name: "app_micro_post_add", priority: 2)]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
-        $microPost = new MicroPost();
-        $form = $this->createFormBuilder($microPost)
-            ->add('title')
-            ->add('text')
-            // ->add('submit', SubmitType::class, ['label' => 'Save'])
-            ->getForm();
-
+        // create form
+        $form = $this->createForm(MicroPostType::class, new MicroPost());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -73,6 +69,39 @@ class MicroPostController extends AbstractController
 
             // add flash message
             $this->addFlash('success', 'Your micro post have been added.');
+
+            //redirect 
+            return $this->redirectToRoute('app_micro_post');
+        }
+
+        return $this->render('micro_post/add.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/micro-post/{post}/edit', name: "app_micro_post_edit")]
+    public function edit(MicroPost $post, Request $request, EntityManagerInterface $em): Response
+    {
+        //method 1, create here the form
+        // $form = $this->createFormBuilder($post)
+        //     ->add('title')
+        //     ->add('text')
+        //     // ->add('submit', SubmitType::class, ['label' => 'Save'])
+        //     ->getForm();
+
+        //method 2, create the form CLASS and use that class to create the form
+        $form = $this->createForm(MicroPostType::class, $post);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+
+            //persist and add data to DB
+            $em->persist($post);
+            $em->flush();
+
+            // add flash message
+            $this->addFlash('success', 'Your micro post have been updated.');
 
             //redirect 
             return $this->redirectToRoute('app_micro_post');
