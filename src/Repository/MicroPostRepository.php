@@ -16,6 +16,17 @@ class MicroPostRepository extends ServiceEntityRepository
         parent::__construct($registry, MicroPost::class);
     }
 
+    public function findAllWithComments(): array
+    {
+        // p - is the alias of current table of the context, in this case micro post
+        return $this->createQueryBuilder('p')
+            ->addSelect('c')
+            ->leftJoin('p.comments', 'c')
+            ->orderBy('p.created', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     // public function add(MicroPost $entity, bool $flush = false): void
     // {
     //     $this->getEntityManager()->persist($entity);
