@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
+use App\Entity\MicroPost;
 use App\Entity\User;
 use App\Entity\UserProfile;
+use App\Repository\CommentRepository;
+use App\Repository\MicroPostRepository;
 use App\Repository\UserProfileRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +27,7 @@ class HelloController extends AbstractController
     // optional parameter to return a specific number of elements 
     // (the limit is a number)
     #[Route('/', name: 'app_index')]
-    public function index(UserProfileRepository $profiles): Response
+    public function index(UserProfileRepository $profiles, MicroPostRepository $posts, EntityManagerInterface $em, CommentRepository $comments): Response
     {
         // $user = new User();
         // $user->setEmail('email@email.com');
@@ -32,9 +37,36 @@ class HelloController extends AbstractController
         // $profile->setUser($user);
         // // add & remove method were added manually in UserRepository & UserProfileRepository
         // $profiles->add($profile, true);
+        // or you can use the recommended way  => entity manager
+        // $em->persist($profile);
+        // $em->flush();
 
         // $profile = $profiles->find(1);
         // $profiles->remove($profile, true);
+
+
+        // connect 2 entity at the same time, post & comment
+        // $post = new MicroPost(); // this is independent
+        // $post->setTitle('2Hello');
+        // $post->setText('2Hello');
+        // $post->setCreated(new DateTime());
+
+        $post = $posts->find(9);
+        // $comment = $post->getComments()[0];
+        // $comment->setPost(null);
+        // $comments->add($comment, true);
+        // $post->getComments()->count();
+        // $post->removeComment($comment); // only way to remove a comment
+
+        // $comment = new Comment(); // using a separate repository we saved the comment
+        // $comment->setText('Hello');
+        // $comment->setPost($post);
+        // // $post->addComment($comment);
+        // // $em->persist($post);
+        // $em->persist($comment);
+        // $em->flush();
+
+        dd($post);
 
         // return new Response(implode(',', array_slice($this->messages, 0, $limit)));
         return $this->render(

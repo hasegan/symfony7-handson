@@ -16,23 +16,23 @@ class UserProfileRepository extends ServiceEntityRepository
         parent::__construct($registry, UserProfile::class);
     }
 
-    public function add(UserProfile $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
+    // public function add(UserProfile $entity, bool $flush = false): void
+    // {
+    //     $this->getEntityManager()->persist($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+    //     if ($flush) {
+    //         $this->getEntityManager()->flush();
+    //     }
+    // }
 
-    public function remove(UserProfile $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+    // public function remove(UserProfile $entity, bool $flush = false): void
+    // {
+    //     $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+    //     if ($flush) {
+    //         $this->getEntityManager()->flush();
+    //     }
+    // }
 
     //    /**
     //     * @return UserProfile[] Returns an array of UserProfile objects
