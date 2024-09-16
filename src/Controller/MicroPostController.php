@@ -8,6 +8,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -51,7 +52,7 @@ class MicroPostController extends AbstractController
     }
 
     #[Route('/micro-post/add', name: "app_micro_post_add", priority: 2)]
-    public function add(): Response
+    public function add(Request $request, EntityManagerInterface $em): Response
     {
         $microPost = new MicroPost();
         $form = $this->createFormBuilder($microPost)
@@ -59,6 +60,23 @@ class MicroPostController extends AbstractController
             ->add('text')
             ->add('submit', SubmitType::class, ['label' => 'Save'])
             ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $post = $form->getData();
+            $post->setCreated(new DateTime());
+
+            //persist and add data to DB
+            $em->persist($post);
+            $em->flush();
+
+            // add flash message
+            $this->addFlash('success', 'Your micro post have been added.');
+
+            //redirect 
+            return $this->redirectToRoute('app_micro_post');
+        }
 
         return $this->render('micro_post/add.html.twig', [
             'form' => $form,
