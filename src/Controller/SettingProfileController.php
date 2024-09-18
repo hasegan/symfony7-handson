@@ -9,10 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class SettingProfileController extends AbstractController
 {
-    #[Route('/setting/profile', name: 'app_setting_profile')]
+    #[Route('/setting/profile', name: 'app_settings_profile')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function profile(
         Request $request,
         EntityManagerInterface $em
@@ -29,18 +31,18 @@ class SettingProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userProfile = $form->getData();
-            // $user->setUserProfile($userProfile);
-            // $em->persist($user);
-            // $em->flush();
+            $user->setUserProfile($userProfile);
+            $em->persist($user);
+            $em->flush();
 
-            // $this->addFlash(
-            //     'success',
-            //     'Your user profile settings were saved.'
-            // );
+            $this->addFlash(
+                'success',
+                'Your user profile settings were saved.'
+            );
 
-            // return $this->redirectToRoute(
-            //     'app_settings_profile'
-            // );
+            return $this->redirectToRoute(
+                'app_settings_profile'
+            );
         }
         return $this->render('setting_profile/profile.html.twig', [
             'form' => $form->createView(),
